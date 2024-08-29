@@ -1,111 +1,31 @@
-// import React, { useState } from 'react';
-// import { Link } from 'react-router-dom';
-
-// function Sidebar() {
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   const toggleSidebar = () => {
-//     setIsOpen(!isOpen);
-//   };
-
-//   return (
-//     <div className="relative flex">
-//       {/* Toggle Button */}
-//       <button
-//         className="text-white p-4 bg-gray-800 focus:outline-none z-10"
-//         onClick={toggleSidebar}
-//       >
-//         <svg
-//           xmlns="http://www.w3.org/2000/svg"
-//           className="h-6 w-6"
-//           fill="none"
-//           viewBox="0 0 24 24"
-//           stroke="currentColor"
-//         >
-//           <path
-//             strokeLinecap="round"
-//             strokeLinejoin="round"
-//             strokeWidth="2"
-//             d={
-//               isOpen
-//                 ? 'M6 18L18 6M6 6l12 12'
-//                 : 'M4 6h16M4 12h16m-7 6h7'
-//             }
-//           />
-//         </svg>
-//       </button>
-
-//       {/* Sidebar */}
-//       <div
-//         className={`fixed top-0 left-0 h-screen bg-gray-800 text-white transition-transform transform ${
-//           isOpen ? 'translate-x-0' : '-translate-x-full'
-//         } w-64`}
-//       >
-//         <div className="flex flex-col justify-between h-full">
-//           {/* Menu Items */}
-//           <nav className="flex-1 mt-10">
-//             <ul className="space-y-2">
-//               <li>
-//                 <Link
-//                   to="/"
-//                   className="flex items-center p-4 hover:bg-gray-700"
-//                 >
-//                   <span className="ml-4">Home</span>
-//                 </Link>
-//               </li>
-//               <li>
-//                 <Link
-//                   to="/about"
-//                   className="flex items-center p-4 hover:bg-gray-700"
-//                 >
-//                   <span className="ml-4">About</span>
-//                 </Link>
-//               </li>
-//               <li>
-//                 <Link
-//                   to="/services"
-//                   className="flex items-center p-4 hover:bg-gray-700"
-//                 >
-//                   <span className="ml-4">Services</span>
-//                 </Link>
-//               </li>
-//               <li>
-//                 <Link
-//                   to="/contact"
-//                   className="flex items-center p-4 hover:bg-gray-700"
-//                 >
-//                   <span className="ml-4">Contact</span>
-//                 </Link>
-//               </li>
-//             </ul>
-//           </nav>
-//         </div>
-//       </div>
-
-//       {/* Main Content */}
-//       <div className="flex-1 p-6 bg-gray-100">
-//         {/* Your main content here */}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Sidebar;
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PanelMenu } from 'primereact/panelmenu';
-import { Button } from 'primereact/button';
 import 'primereact/resources/themes/saga-blue/theme.css';  // Ensure these are imported
 import 'primereact/resources/primereact.min.css';           // Ensure these are imported
 import 'primeicons/primeicons.css';                         // Ensure these are imported
 import { FiSend } from "react-icons/fi";
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import SignUpForm from './SignUpForm';
+import LoginForm from './LoginForm';
+
+
+
+
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState('login'); // To switch between Login and Sign Up
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
 
   const items = [
     {
@@ -234,21 +154,22 @@ function Navbar() {
       {/* Right Side: Account, Offer, Call Us */}
       <div className="flex items-center space-x-8">
       <button
-      className={`
-        px-4 py-2 rounded-full 
-        flex items-center gap-2 
-        text-slate-500
-        shadow-[-5px_-5px_10px_rgba(255,_255,_255,_0.8),_5px_5px_10px_rgba(0,_0,_0,_0.25)]
-        
-        transition-all
+          className={`
+            px-4 py-2 rounded-full 
+            flex items-center gap-2 
+            text-slate-500
+            shadow-[-5px_-5px_10px_rgba(255,_255,_255,_0.8),_5px_5px_10px_rgba(0,_0,_0,_0.25)]
+            
+            transition-all
 
-        hover:shadow-[-1px_-1px_5px_rgba(255,_255,_255,_0.6),_1px_1px_5px_rgba(0,_0,_0,_0.3),inset_-2px_-2px_5px_rgba(255,_255,_255,_1),inset_2px_2px_4px_rgba(0,_0,_0,_0.3)]
-        hover:text-dark-green
-    `}
-    >
-      <FiSend />
-      <span>My Account</span>
-    </button>
+            hover:shadow-[-1px_-1px_5px_rgba(255,_255,_255,_0.6),_1px_1px_5px_rgba(0,_0,_0,_0.3),inset_-2px_-2px_5px_rgba(255,_255,_255,_1),inset_2px_2px_4px_rgba(0,_0,_0,_0.3)]
+            hover:text-dark-green
+          `}
+          onClick={toggleModal}
+        >
+          <FiSend />
+          <span>My Account</span>
+        </button>
     <button
       className={`
         px-4 py-2 rounded-full 
@@ -419,10 +340,39 @@ function Navbar() {
           onClick={toggleMenu}
         ></div>
       )}
+      {/* Modal for My Account */}
+      <Dialog 
+        header="My Account" 
+        visible={isModalVisible} 
+        onHide={toggleModal} 
+        breakpoints={{'960px': '75vw', '640px': '100vw'}} 
+        style={{ width: '50vw' }}
+      >
+        <div>
+          <div className="flex justify-center mb-4">
+            <button
+              className={`px-4 py-2 ${activeTab === 'login' ? 'bg-dark-green text-white' : 'bg-gray-100 text-dark-green'} rounded-md`}
+              onClick={() => setActiveTab('login')}
+            >
+              Log In
+            </button>
+            <button
+              className={`ml-4 px-4 py-2 ${activeTab === 'signup' ? 'bg-dark-green text-white' : 'bg-gray-100 text-dark-green'} rounded-md`}
+              onClick={() => setActiveTab('signup')}
+            >
+              Sign Up
+            </button>
+          </div>
+          {activeTab === 'login' ? <LoginForm /> : <SignUpForm />}
+        </div>
+      </Dialog>
     </nav>
   );
 }
 
 export default Navbar;
+
+
+
 
 
