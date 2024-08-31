@@ -5,7 +5,8 @@ import { PanelMenu } from 'primereact/panelmenu';
 import 'primereact/resources/themes/saga-blue/theme.css';  // Ensure these are imported
 import 'primereact/resources/primereact.min.css';           // Ensure these are imported
 import 'primeicons/primeicons.css';                         // Ensure these are imported
-import { FiSend } from "react-icons/fi";
+import { FiSend, FiPhone, FiMail, FiMapPin } from "react-icons/fi";
+import { FaFacebook, FaInstagram, FaYoutube, FaTwitter } from 'react-icons/fa';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import SignUpForm from './SignUpForm';
@@ -17,6 +18,8 @@ import LoginForm from './LoginForm';
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isOfferModalVisible, setIsOfferModalVisible] = useState(false); // New state for Offers modal
+  const [isCallUsModalVisible, setIsCallUsModalVisible] = useState(false);
   const [activeTab, setActiveTab] = useState('login'); // To switch between Login and Sign Up
 
   const toggleMenu = () => {
@@ -24,6 +27,12 @@ function Navbar() {
   };
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
+  };
+  const toggleOfferModal = () => {
+    setIsOfferModalVisible(!isOfferModalVisible);
+  };
+  const toggleCallUsModal = () => {
+    setIsCallUsModalVisible(!isCallUsModalVisible);
   };
 
 
@@ -146,6 +155,7 @@ function Navbar() {
         </button>
 
         {/* Logo */}
+        
         <Link to="/" className="text-dark-green text-lg font-bold">
           Your Logo
         </Link>
@@ -182,6 +192,7 @@ function Navbar() {
         hover:shadow-[-1px_-1px_5px_rgba(255,_255,_255,_0.6),_1px_1px_5px_rgba(0,_0,_0,_0.3),inset_-2px_-2px_5px_rgba(255,_255,_255,_1),inset_2px_2px_4px_rgba(0,_0,_0,_0.3)]
         hover:text-dark-green
     `}
+    onClick={toggleOfferModal}
     >
       <FiSend />
       <span>Offers</span>
@@ -198,6 +209,7 @@ function Navbar() {
         hover:shadow-[-1px_-1px_5px_rgba(255,_255,_255,_0.6),_1px_1px_5px_rgba(0,_0,_0,_0.3),inset_-2px_-2px_5px_rgba(255,_255,_255,_1),inset_2px_2px_4px_rgba(0,_0,_0,_0.3)]
         hover:text-lime-800
     `}
+    onClick={toggleCallUsModal}
     >
       <FiSend />
       <span>Call Us</span>
@@ -228,6 +240,7 @@ function Navbar() {
         hover:shadow-[-1px_-1px_5px_rgba(255,_255,_255,_0.6),_1px_1px_5px_rgba(0,_0,_0,_0.3),inset_-2px_-2px_5px_rgba(255,_255,_255,_1),inset_2px_2px_4px_rgba(0,_0,_0,_0.3)]
         hover:text-dark-green
     `}
+    onClick={toggleModal}
     >
       <FiSend />
       <span>Log In</span>
@@ -244,6 +257,7 @@ function Navbar() {
         hover:shadow-[-1px_-1px_5px_rgba(255,_255,_255,_0.6),_1px_1px_5px_rgba(0,_0,_0,_0.3),inset_-2px_-2px_5px_rgba(255,_255,_255,_1),inset_2px_2px_4px_rgba(0,_0,_0,_0.3)]
         hover:text-dark-green
     `}
+    onClick={toggleModal}
     >
       <FiSend />
       <span>Sign Up</span>
@@ -364,6 +378,73 @@ function Navbar() {
             </button>
           </div>
           {activeTab === 'login' ? <LoginForm /> : <SignUpForm />}
+        </div>
+      </Dialog>
+      {/* Modal for Offers */}
+      <Dialog 
+        header="Special Offers and Discounts" 
+        visible={isOfferModalVisible} 
+        onHide={toggleOfferModal} 
+        breakpoints={{'960px': '75vw', '640px': '100vw'}} 
+        style={{ width: '50vw' }}
+      >
+        <div className="p-6 space-y-4 bg-gradient-to-r from-teal-400 to-teal-600 text-white rounded-lg shadow-lg">
+          <h2 className="text-2xl font-bold">Exclusive Offers!</h2>
+          <p className="text-lg">Check out our special discounts and deals available for a limited time only. Don’t miss out on the opportunity to save big on your next purchase.</p>
+          <ul className="list-disc list-inside space-y-2">
+            <li>Discount 1: 20% off on all items</li>
+            <li>Discount 2: Buy one, get one free</li>
+            <li>Discount 3: Free shipping on orders over $50</li>
+          </ul>
+        </div>
+      </Dialog>
+      {/* Modal for Call Us */}
+      <Dialog 
+        header="Contact Us" 
+        visible={isCallUsModalVisible} 
+        onHide={toggleCallUsModal} 
+        breakpoints={{'960px': '75vw', '640px': '100vw'}} 
+        style={{ width: '50vw' }}
+      >
+        <div className="p-6 bg-gradient-to-r from-gray-100 to-gray-100 text-green-800 rounded-lg shadow-lg">
+          <h2 className="text-3xl font-bold mb-4">Contact Us</h2>
+          <div className="space-y-4">
+            <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md">
+              <FiPhone className="text-3xl text-green-500" />
+              <div>
+                <h3 className="text-xl font-semibold">Phone</h3>
+                <a href="tel:+1234567890" className="text-lg text-green-800 hover:text-black">+123-456-7890</a>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md">
+              <FiMail className="text-3xl text-red-500" />
+              <div>
+                <h3 className="text-xl font-semibold">Email</h3>
+                <a href="mailto:info@example.com" className="text-lg text-green-800 hover:text-black">info@example.com</a>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md">
+              <FiMapPin className="text-3xl text-yellow-500" />
+              <div>
+                <h3 className="text-xl font-semibold">Address</h3>
+                <p className="text-lg text-green-800 hover:text-black">123 Main Street, City, Country</p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-6 flex justify-center gap-6">
+            <a href="https://facebook.com/example" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:text-blue-500">
+              <FaFacebook className="text-3xl" />
+            </a>
+            <a href="https://instagram.com/example" target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-400">
+              <FaInstagram className="text-3xl" />
+            </a>
+            <a href="https://youtube.com/example" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-400">
+              <FaYoutube className="text-3xl" />
+            </a>
+            <a href="https://twitter.com/example" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">
+              <FaTwitter className="text-3xl" />
+            </a>
+          </div>
         </div>
       </Dialog>
     </nav>
